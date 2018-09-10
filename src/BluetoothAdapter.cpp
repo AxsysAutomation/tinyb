@@ -49,7 +49,9 @@ void BluetoothNotificationHandler::on_properties_changed_adapter(GDBusProxy *pro
         GVariant *value;
         const gchar *key;
         g_variant_get(changed_properties, "a{sv}", &iter);
+		std::cout << "Iterating through changed properties.." << std::endl;
         while (iter != nullptr && g_variant_iter_loop(iter, "{&sv}", &key, &value)) {
+			std::cout << "Changed property: " << std::to_string(key) << std::endl;
             auto powered_callback = c->powered_callback;
             if (powered_callback != nullptr && g_ascii_strncasecmp(key, "powered", 8) == 0) {
                 bool new_value;
