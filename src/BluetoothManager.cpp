@@ -34,6 +34,7 @@
 #include "version.h"
 
 #include <cassert>
+#include <iostream>
 
 using namespace tinyb;
 
@@ -261,6 +262,7 @@ BluetoothManager::BluetoothManager() : event_list()
     GError *error = NULL;
     GList *objects, *l;
 
+	std::cout << "Starting bluetooth manager" << std::endl;
 
     gdbus_manager = object_manager_client_new_for_bus_sync(
             G_BUS_TYPE_SYSTEM,
