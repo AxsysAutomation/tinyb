@@ -30,6 +30,8 @@
 #include "BluetoothManager.hpp"
 #include "BluetoothException.hpp"
 
+#include <iostream>
+
 using namespace tinyb;
 
 void BluetoothNotificationHandler::on_properties_changed_adapter(GDBusProxy *proxy, GVariant *changed_properties, GStrv invalidated_properties, gpointer userdata) {
@@ -38,6 +40,8 @@ void BluetoothNotificationHandler::on_properties_changed_adapter(GDBusProxy *pro
 
     if (!c->lock())
         return;
+
+	std::cout << "Bluetooth adapter property change handler." << std::endl;
 
     if(g_variant_n_children(changed_properties) > 0) {
         GVariantIter *iter = NULL;
@@ -50,6 +54,7 @@ void BluetoothNotificationHandler::on_properties_changed_adapter(GDBusProxy *pro
             if (powered_callback != nullptr && g_ascii_strncasecmp(key, "powered", 8) == 0) {
                 bool new_value;
                 g_variant_get(value, "b", &new_value);
+				std::cout << "Powered: " << new_value << std::endl;
                 powered_callback(new_value);
                 continue;
             }

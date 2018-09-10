@@ -30,6 +30,8 @@
 #include "BluetoothGattDescriptor.hpp"
 #include "BluetoothException.hpp"
 
+#include <iostream>
+
 using namespace tinyb;
 
 void BluetoothNotificationHandler::on_properties_changed_characteristic(GDBusProxy *proxy, GVariant *changed_properties, GStrv invalidated_properties, gpointer userdata) {
@@ -37,6 +39,7 @@ void BluetoothNotificationHandler::on_properties_changed_characteristic(GDBusPro
     auto c = static_cast<BluetoothGattCharacteristic*>(userdata);
 
     if(g_variant_n_children(changed_properties) > 0) {
+		std::cout << "GATT characteristic property change handler." << std::endl;
         GVariantIter *iter = NULL;
 
         GVariant *value;
@@ -45,6 +48,7 @@ void BluetoothNotificationHandler::on_properties_changed_characteristic(GDBusPro
         while (iter != nullptr && g_variant_iter_loop(iter, "{&sv}", &key, &value)) {
             auto value_callback = c->value_changed_callback;
             if (value_callback != nullptr && g_ascii_strncasecmp(key, "value", 5) == 0) {
+				std::cout << "Property type - value" << std::endl;
                 std::vector<unsigned char> new_value = from_iter_to_vector(value);
                 value_callback(new_value);
             }
